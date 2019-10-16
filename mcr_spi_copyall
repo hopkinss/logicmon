@@ -13,19 +13,19 @@
   *----------------------------------------------------------------------*;
   data log;       
     length log $5000; 
-    cmd = 'robocopy   '||" "|| catx("&in_dir",'"','"') ||" "|| catx("&out_dir",'"','"')||' /E /log:'||catx("&logfile",'"','"');
+    cmd = 'robocopy   '||" "|| catx("&in_dir",'"','"') ||" "|| catx("&out_dir",'"','"')||' /E';
     infile dummy pipe filevar=cmd;    
     input;      
     log = strip(_infile_);
   run;  
-/**/
-/*  data _null_;   */
-/*    file "&logfile";*/
-/*    set log end=eof;*/
-/*    put line;*/
-/*    if eof then putlog "NOT" "ICE: details of the copy written to &logfile";*/
-/*  run;*/
+
+  data _null_;   
+    file "&logfile";
+    set log end=eof;
+    put log;
+    if eof then putlog "NOT" "ICE: details of the copy written to &logfile";
+  run;
 
 %mend;
-%mcr_spi_copyall(in_dir=O:\Projects_dev\batch_copy_testing\ASG-22CE,
+%mcr_spi_copyall(in_dir=O:\Projects_dev\batch_copy_testing\ASG-22CE\clinicalTrial,
                  out_dir=O:\Projects_dev\batch_copy_testing\ASG-22CE\test);
